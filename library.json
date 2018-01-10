@@ -1,0 +1,22 @@
+{
+  "name": "ESPFirmware",
+  "keywords": "ESP8266, ESP32, ota, Frimware",
+  "description": "This Library can be used for Automatik update the Firmware of a ESP8266/ESP32",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/thro42/ESPFirmware.git"
+  },
+  "version": "0.1.0",
+  "authors": {
+    "name": "Robert Thomitzek",
+    "url": "http://www.thomitzek.com"
+  },
+  "exclude": [
+    "fuzzing",
+    "scripts",
+    "test",
+    "third-party"
+  ],
+  "frameworks": "arduino",
+  "platforms": ["esp8266","esp32"]
+}
