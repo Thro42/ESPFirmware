@@ -1,12 +1,13 @@
 #define SKETCH_NAME "FwUpdJson"
 #define SKETCH_VERSION 1.50
+#define FW_ROOTURL "http://192.168.1.1/fw/"
 
 #include <ESPFirmware.h>
 
 #include <ESP8266WiFi.h>
 
-const char* ssid = "Thomitzek";
-const char* password = "thomitzek6410";
+const char* ssid = "mySsid";
+const char* password = "MySsidPw";
 String sname = SKETCH_NAME;
 
 void setup() {
@@ -22,7 +23,7 @@ void setup() {
   if (  WiFi.status() == WL_CONNECTED  ) {
     Serial.print ( "IP address: " );
     Serial.println ( WiFi.localIP() );
-    ESPFirmware fwUpd(sname, SKETCH_VERSION )
+    ESPFirmware fwUpd(FW_ROOTURL, SKETCH_NAME, SKETCH_VERSION );
     fwUpd.Update();
   }
 }

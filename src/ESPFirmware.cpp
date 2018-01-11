@@ -40,10 +40,24 @@ ESPFirmware::ESPFirmware(String sketchName){
   _updmode = bin;
 }
 
+ESPFirmware::ESPFirmware(String rootURL, String sketchName){
+  _fwRootURL = rootURL;
+  _Name = sketchName;
+  _FVersion = 1.0;
+  _updmode = bin;
+}
+
 ESPFirmware::ESPFirmware(String sketchName, float fVersion) {
   _Name = sketchName;
   _FVersion = fVersion;
   _updmode = json;
+}
+ESPFirmware::ESPFirmware(String rootURL, String sketchName, float fVersion){
+  _fwRootURL = rootURL;
+  _Name = sketchName;
+  _FVersion = fVersion;
+  _updmode = json;
+
 }
 
 ESPFirmware::ESPFirmware(String sketchName, float fVersion, fw_upd_mode updmode) {

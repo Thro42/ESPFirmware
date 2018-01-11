@@ -40,7 +40,9 @@ struct versionInfo {
 class ESPFirmware {
 public:
   ESPFirmware(String sketchName);
+  ESPFirmware(String rootURL, String sketchName);
   ESPFirmware(String sketchName, float fVersion);
+  ESPFirmware(String rootURL, String sketchName, float fVersion);
   ESPFirmware(String sketchName, float fVersion, fw_upd_mode updmode);
   ESPFirmware(String sketchName, float fVersion, fw_upd_mode updmode, int iD);
   void Update();
@@ -55,7 +57,7 @@ private:
   int _ID;
   float _FVersion;
   fw_upd_mode _updmode;
-  String _fwRootURL = "http://192.168.42.10/firmware/";
+  String _fwRootURL = "http://192.168.2.1/firmware/";
   versionInfo ReadVersionInfo();
   bool isValidVersion(String str);
   bool doUpdate(versionInfo versInfo);
