@@ -51,6 +51,7 @@ public:
   void setRootUrl(String rootURL);
   void setID(int iD);
   void setMode( fw_upd_mode updmode );
+  void setDebug(bool debug);
 
 private:
   String _Name;
@@ -58,6 +59,7 @@ private:
   float _FVersion;
   fw_upd_mode _updmode;
   String _fwRootURL = "http://192.168.2.1/firmware/";
+  bool _debug;
   versionInfo ReadVersionInfo();
   bool isValidVersion(String str);
   bool doUpdate(versionInfo versInfo);

@@ -34,13 +34,13 @@
 #define DebugLn(x)
 #endif
 
-ESPFirmware::ESPFirmware(String sketchName){
+ESPFirmware::ESPFirmware(String sketchName) {
   _Name = sketchName;
   _FVersion = 1.0;
   _updmode = bin;
 }
 
-ESPFirmware::ESPFirmware(String rootURL, String sketchName){
+ESPFirmware::ESPFirmware(String rootURL, String sketchName) {
   _fwRootURL = rootURL;
   _Name = sketchName;
   _FVersion = 1.0;
@@ -52,15 +52,15 @@ ESPFirmware::ESPFirmware(String sketchName, float fVersion) {
   _FVersion = fVersion;
   _updmode = json;
 }
-ESPFirmware::ESPFirmware(String rootURL, String sketchName, float fVersion){
+ESPFirmware::ESPFirmware(String rootURL, String sketchName, float fVersion) {
   _fwRootURL = rootURL;
   _Name = sketchName;
   _FVersion = fVersion;
   _updmode = json;
-
 }
 
-ESPFirmware::ESPFirmware(String sketchName, float fVersion, fw_upd_mode updmode) {
+ESPFirmware::ESPFirmware(String sketchName, float fVersion,
+                         fw_upd_mode updmode) {
   _Name = sketchName;
   _FVersion = fVersion;
   _updmode = updmode;
@@ -69,19 +69,20 @@ ESPFirmware::ESPFirmware(String sketchName, float fVersion, fw_upd_mode updmode)
   }
 }
 
-ESPFirmware::ESPFirmware(String sketchName, float fVersion, fw_upd_mode updmode, int iD){
+ESPFirmware::ESPFirmware(String sketchName, float fVersion, fw_upd_mode updmode,
+                         int iD) {
   _Name = sketchName;
   _FVersion = fVersion;
   _updmode = updmode;
   _ID = iD;
 }
 
-void ESPFirmware::Update( fw_upd_mode updmode ) {
+void ESPFirmware::Update(fw_upd_mode updmode) {
   _updmode = updmode;
   Update();
 }
 
-void ESPFirmware::Update( fw_upd_mode updmode , int iD ) {
+void ESPFirmware::Update(fw_upd_mode updmode, int iD) {
   _updmode = updmode;
   _ID = iD;
   Update();
@@ -91,7 +92,7 @@ void ESPFirmware::Update() {
   versionInfo _versInfo;
   _versInfo = ReadVersionInfo();
   if (doUpdate(_versInfo)) {
-//
+    //
   }
 }
 
@@ -107,9 +108,9 @@ bool ESPFirmware::isValidVersion(String str) {
 
 void ESPFirmware::setRootUrl(String rootURL) { _fwRootURL = rootURL; }
 
-void ESPFirmware::setID(int iD){ _ID = iD; }
+void ESPFirmware::setID(int iD) { _ID = iD; }
 
-void ESPFirmware::setMode( fw_upd_mode updmode ){ _updmode = updmode; }
+void ESPFirmware::setMode(fw_upd_mode updmode) { _updmode = updmode; }
 
 versionInfo ESPFirmware::ReadVersionInfo() {
   HTTPClient http;
@@ -135,9 +136,13 @@ versionInfo ESPFirmware::ReadVersionInfo() {
     break;
   }
   if ((_updmode == json) || (_updmode == id_json)) {
-    http.begin(url_VersInfo);            // Webseite aufrufen
-    int httpCode = http.GET();           // Antwort des Servers einlesen
-    if (httpCode != HTTP_CODE_OK) {      // Wenn Antwort nicht OK
+    http.begin(url_VersInfo);       // Webseite aufrufen
+    int httpCode = http.GET();      // Antwort des Servers einlesen
+    if (httpCode != HTTP_CODE_OK) { // Wenn Antwort nicht OK
+      if (_debug) {
+        Serial.print("Read File Info:");
+        Serial.println(url_VersInfo);
+      }
       String payload = http.getString(); // Webseite einlesen
       delay(500);
       StaticJsonBuffer<200> recBuffer;
@@ -163,6 +168,13 @@ bool ESPFirmware::doUpdate(versionInfo versInfo) {
   bool ret_val;
   if (versInfo.version > _FVersion) // Firmwareversion mit aktueller vergleichen
   {
+    if (_debug) {
+      Serial.print("New fersion found:");
+      String stmp;
+      char logString[130];
+      sprintf(logString, "%4.2f > %4.2f", versInfo.version, _FVersion);
+      Serial.println(logString);
+    }
     // reboot abschalten, wir wollen erst Meldungen ausgeben
     ESPhttpUpdate.rebootOnUpdate(false);
     // Update lesen
@@ -170,8 +182,17 @@ bool ESPFirmware::doUpdate(versionInfo versInfo) {
     switch (ret) {
     case HTTP_UPDATE_FAILED:
       ret_val = false;
+      if (_debug) {
+        Serial.print("Fail to Update:");
+        Serial.println(versInfo.binfile);
+      }
       break;
     case HTTP_UPDATE_OK:
+      if (_debug) {
+        Serial.print("Update:");
+        Serial.print(versInfo.binfile);
+        Serial.println(" successfully");
+      }
       ret_val = true;
       delay(1);
       ESP.reset();
@@ -183,3 +204,5 @@ bool ESPFirmware::doUpdate(versionInfo versInfo) {
   }
   return ret_val;
 }
+
+void ESPFirmware::setDebug(bool debug) { _debug = debug; }
