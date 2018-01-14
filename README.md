@@ -4,9 +4,9 @@ This Library can be used for Automatik update the Firmware of a ESP8266/ESP32
 ### Example versionInfo
 The Version Information is stored in JSON Format in a File on a Webserver.  
 #### versionInfo without IS
-File Name: **SketchName.json**
+File Name: *SketchName.json*
 #### versionInfo with ID
-File Name: **SketchName.ID.json**
+File Name: *SketchName.ID.json*
 #### versionInfo content
 ```json
 {

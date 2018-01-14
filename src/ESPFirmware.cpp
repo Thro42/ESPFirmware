@@ -140,6 +140,12 @@ versionInfo ESPFirmware::ReadVersionInfo() {
     int httpCode = http.GET();      // Antwort des Servers einlesen
     if (httpCode != HTTP_CODE_OK) { // Wenn Antwort nicht OK
       if (_debug) {
+        Serial.print("No File Info:");
+        Serial.println(url_VersInfo);
+        _versInfo.version = 0.0;
+      }
+    } else {
+      if (_debug) {
         Serial.print("Read File Info:");
         Serial.println(url_VersInfo);
       }
@@ -148,6 +154,7 @@ versionInfo ESPFirmware::ReadVersionInfo() {
       StaticJsonBuffer<200> recBuffer;
       //    DynamicJsonBuffer recBuffer ;
       JsonObject &root = recBuffer.parseObject(payload);
+      _versInfo.version = 0.0;
       if (root.containsKey("version")) {
         const char *cVers = root["version"];
         String sVersion = String(cVers);
